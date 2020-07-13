@@ -14,7 +14,7 @@ class CoinSpider(scrapy.Spider):
           assert(splash:go(url))
           assert(splash:wait(1))
           rur_tab = assert(splash:select_all(".filterPanelItem___2z5Gb"))
-          rur_tab[4]:mouse_click()
+          rur_tab[1]:mouse_click()
           assert(splash:wait(1))
           splash:set_viewport_full()
           return splash:html()
@@ -30,5 +30,9 @@ class CoinSpider(scrapy.Spider):
         for currency in response.xpath("//div[contains(@class, 'ReactVirtualized__Table__row tableRow___3EtiS ')]"):
             yield {
                 'currency pair': currency.xpath(".//div[1]/div/text()").get(),
-                'volume(24h)': currency.xpath(".//div[2]/span/text()").get()
+                'volume(24h)': currency.xpath(".//div[2]/span/text()").get(),
+                'Last price': currency.xpath(".//div[3]/span/text()").get(),
+                'Change (24h)': currency.xpath(".//div[4]/span/span/text()").get(),
+                'High (24h)': currency.xpath(".//div[5]/span/text()").get(),
+                'Low (24h)': currency.xpath(".//div[6]/span/text()").get(),
             }
