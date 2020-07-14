@@ -24,7 +24,6 @@ class CoinSpider(scrapy.Spider):
           url = args.url
           assert(splash:go(url))
           assert(splash:wait(1))
-          assert(splash:wait(1))
           splash:set_viewport_full()
           return splash:html()
         end
@@ -36,6 +35,7 @@ class CoinSpider(scrapy.Spider):
                 url = self.base_category_url + v
                 yield SplashRequest(url, callback=self.parse, meta={'category': k}, endpoint="execute", args={
                     'lua_source': self.script
+
                 })
 
     def parse(self, response):
@@ -47,4 +47,14 @@ class CoinSpider(scrapy.Spider):
                 'Change_24h': currency.xpath(".//div[4]/span/span/text()").get(),
                 'High_24h': currency.xpath(".//div[5]/span/text()").get(),
                 'Low_24h': currency.xpath(".//div[6]/span/text()").get(),
+                'partners_name': currency.xpath(".//div/h1/a/text()").get(),
+                'partner_info': currency.xpath(".//div/text()")[1].get().split()
+
+            }
+
+        for currency in response.xpath("//div[contains(@class, 'partner cfix')]"):
+            yield {
+                'partners_name': currency.xpath(".//div/h1/a/text()").get(),
+                'partner_info': currency.xpath(".//div/text()")[1].get().split()
+
             }
