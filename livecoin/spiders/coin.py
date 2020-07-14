@@ -47,14 +47,12 @@ class CoinSpider(scrapy.Spider):
                 'Change_24h': currency.xpath(".//div[4]/span/span/text()").get(),
                 'High_24h': currency.xpath(".//div[5]/span/text()").get(),
                 'Low_24h': currency.xpath(".//div[6]/span/text()").get(),
-                'partners_name': currency.xpath(".//div/h1/a/text()").get(),
-                'partner_info': currency.xpath(".//div/text()")[1].get().split()
 
             }
 
         for currency in response.xpath("//div[contains(@class, 'partner cfix')]"):
             yield {
-                'partners_name': currency.xpath(".//div/h1/a/text()").get(),
-                'partner_info': currency.xpath(".//div/text()")[1].get().split()
+                'name_partner': currency.xpath(".//div/h1/a/text()").get(),
+                'info_partner': currency.xpath(".//div/text()")[1].get().split()
 
             }
