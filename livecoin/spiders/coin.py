@@ -5,7 +5,17 @@ from scrapy_splash import SplashRequest
 
 class CoinSpider(scrapy.Spider):
     name = 'coin'
-    allowed_domains = ['www.livecoin.net/en']
+    allowed_domains = ['www.livecoin.net']
+
+    base_category_url = "https://www.livecoin.net"
+
+    start_url_dict = {
+        u"market": "/en",
+        u"news": "/en/news/list",
+        u"fees_and_limits": "/en/fees",
+        u"exchange_services": "/en/partners"
+
+    }
 
     script = '''
         function main(splash, args)
@@ -14,8 +24,6 @@ class CoinSpider(scrapy.Spider):
           url = args.url
           assert(splash:go(url))
           assert(splash:wait(1))
-          rur_tab = assert(splash:select_all(".filterPanelItem___2z5Gb"))
-          rur_tab[1]:mouse_click()
           assert(splash:wait(1))
           splash:set_viewport_full()
           return splash:html()
@@ -23,9 +31,12 @@ class CoinSpider(scrapy.Spider):
     '''
 
     def start_requests(self):
-        yield SplashRequest(url="https://www.livecoin.net/en", callback=self.parse, endpoint="execute", args={
-            'lua_source': self.script
-        })
+        for k, v in self.start_url_dict.items():
+            for i in range(4):
+                url = self.base_category_url + v
+                yield SplashRequest(url, callback=self.parse, meta={'category': k}, endpoint="execute", args={
+                    'lua_source': self.script
+                })
 
     def parse(self, response):
         for currency in response.xpath("//div[contains(@class, 'ReactVirtualized__Table__row tableRow___3EtiS ')]"):
