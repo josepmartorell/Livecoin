@@ -56,3 +56,18 @@ class CoinSpider(scrapy.Spider):
                 'info_partner': currency.xpath(".//div/text()")[1].get().split()
 
             }
+
+        for currency in response.xpath("//div[contains(@class, 'news_item')]"):
+            yield {
+                'headline_news': currency.xpath(".//h2/a/text()").get(),
+                'entry_news': currency.xpath(".//div[2]/div[1]/text()").get().split()
+
+            }
+
+        for currency in response.xpath("//tr[contains(@class, 'methodFee')]"):
+            yield {
+                'method_fee': currency.xpath(".//td[1]/text()").get().split(),
+                'deposit_fee': currency.xpath(".//td[2]/text()").get().split(),
+                'withdrawal_fee': currency.xpath(".//td[3]/text()").get().split()
+
+            }
