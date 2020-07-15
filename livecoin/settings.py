@@ -93,3 +93,5 @@ ITEM_PIPELINES = {
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 SPLASH_URL = 'http://0.0.0.0:8050'
+
+FEED_EXPORT_ENCODING = 'utf-8'
