@@ -5,7 +5,7 @@ from scrapy_splash import SplashRequest
 
 class NewsSpider(scrapy.Spider):
     name = 'news'
-    allowed_domains = ['www.livecoin.net/en/news/list']
+    allowed_domains = ['www.livecoin.net']
 
     script = '''
         function main(splash, args)
@@ -32,3 +32,10 @@ class NewsSpider(scrapy.Spider):
                 'entry_news': currency.xpath("normalize-space(string(string(.//div[@class='short_text'])))").get()
 
             }
+
+        next_page = response.xpath(
+            './/li[@class=" active"]/following-sibling::li[1]/a/@href').extract_first()
+
+        if next_page is not None:
+            yield response.follow(url=next_page,
+                                  callback=self.parse)
