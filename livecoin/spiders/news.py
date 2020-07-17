@@ -1,27 +1,15 @@
 # -*- coding: utf-8 -*-
 import scrapy
-from scrapy_splash import SplashRequest
 
 
 class NewsSpider(scrapy.Spider):
     name = 'news'
     allowed_domains = ['www.livecoin.net']
 
-    script = '''
-        function main(splash, args)
-          splash.private_mode_enabled = false
-          splash:set_user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0")
-          url = args.url
-          assert(splash:go(url))
-          assert(splash:wait(1))
-          splash:set_viewport_full()
-          return splash:html()
-        end
-    '''
-
     def start_requests(self):
-        yield SplashRequest(url='http://www.livecoin.net/en/news/list/', callback=self.parse, endpoint="execute", args={
-            'lua_source': self.script
+        yield scrapy.Request(url='http://www.livecoin.net/en/news/list/', callback=self.parse, headers={
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                          'Chrome/76.0.3809.100 Safari/537.36 '
         })
 
     def parse(self, response):
