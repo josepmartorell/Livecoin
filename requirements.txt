@@ -16,7 +16,7 @@ hyperlink==19.0.0
 idna==2.9
 importlib-metadata==1.7.0
 incremental==17.5.0
-lxml==4.6.2
+lxml==4.6.3
 more-itertools==8.4.0
 packaging==20.4
 parsel==1.5.2
